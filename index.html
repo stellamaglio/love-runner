@@ -4,22 +4,35 @@
     <meta charset="UTF-8">
     <title>Love Runner</title>
     <style>
-        body {
+        html, body {
             margin: 0;
+            padding: 0;
+            height: 100%;
             overflow: hidden;
         }
         canvas {
             display: block;
             background-color: #87CEEB;
+            width: 100vw;
+            height: 100vh;
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+
+        // Imposta le dimensioni reali del canvas per il rendering
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
         const player = {
             x: 50,
