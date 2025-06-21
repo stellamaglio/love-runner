@@ -8,16 +8,18 @@
         html, body {
             margin: 0;
             padding: 0;
-            height: 100%;
             width: 100%;
+            height: 100%;
             overflow: hidden;
-            background-color: #ff0000; /* Rosso vivo */
+            background-color: #ff0000;
         }
         canvas {
-            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #ff0000; /* Rosso vivo */
+            background-color: #ff0000;
         }
     </style>
 </head>
@@ -30,23 +32,16 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            drawStartScreen();
+        }
+
+        function drawStartScreen() {
+            ctx.fillStyle = "#ff0000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
-
-        // Schermata iniziale tutta rossa
-        function drawStartScreen() {
-            ctx.fillStyle = "#ff0000"; // Sfondo rosso
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function gameLoop() {
-            drawStartScreen();
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
     </script>
 </body>
 </html>
