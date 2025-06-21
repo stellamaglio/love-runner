@@ -21,48 +21,26 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        const playerImage = new Image();
-        playerImage.src = 'assets/teo-sprite.png'; // Assicurati che il file sia caricato nella cartella
-
         const player = {
             x: 50,
             y: 300,
             width: 32,
             height: 32,
-            frame: 0,
-            frameTimer: 0,
-            frameInterval: 10
+            color: 'red'
         };
 
-        function updatePlayer() {
-            player.frameTimer++;
-            if (player.frameTimer >= player.frameInterval) {
-                player.frame = (player.frame + 1) % 4; // Sprite sheet con 4 frame
-                player.frameTimer = 0;
-            }
-        }
-
         function drawPlayer() {
-            ctx.drawImage(
-                playerImage,
-                player.frame * player.width, 0, // source x, y
-                player.width, player.height,     // source width, height
-                player.x, player.y,              // destination x, y
-                player.width, player.height      // destination width, height
-            );
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
         }
 
         function gameLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            updatePlayer();
             drawPlayer();
             requestAnimationFrame(gameLoop);
         }
 
-        playerImage.onload = function () {
-            gameLoop();
-        };
+        gameLoop();
     </script>
 </body>
 </html>
-
