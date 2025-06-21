@@ -1,44 +1,56 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Love Runner</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #ff0000; /* Rosso vivo */
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ff0000; /* Rosso vivo */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-// Oggetto giocatore
-const player = {
-  x: 50,
-  y: 300,
-  width: 40,
-  height: 40,
-  color: "red",
-  velocityY: 0,
-  gravity: 1.5,
-  jumpStrength: -15,
-  isJumping: false
-};
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
 
-// Input: salto
-window.addEventListener("keydown", function(e) {
-  if (e.code === "Space" && !player.isJumping) {
-    player.velocityY = player.jumpStrength;
-    player.isJumping = true;
-  }
-});
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
 
-// Loop di gioco
-function gameLoop() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Schermata iniziale tutta rossa
+        function drawStartScreen() {
+            ctx.fillStyle = "#ff0000"; // Sfondo rosso
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
 
-  // Fisica salto
-  player.velocityY += player.gravity;
-  player.y += player.velocityY;
+        function gameLoop() {
+            drawStartScreen();
+            requestAnimationFrame(gameLoop);
+        }
 
-  if (player.y + player.height >= canvas.height) {
-    player.y = canvas.height - player.height;
-    player.velocityY = 0;
-    player.isJumping = false;
-  }
+        gameLoop();
+    </script>
+</body>
+</html>
 
-  // Disegna giocatore
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.width, player.height);
 
   requestAnimationFrame(gameLoop);
 }
