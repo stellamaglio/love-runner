@@ -1,21 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Love Runner</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
-    canvas {
-      display: block;
-      background: #87CEEB;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Love Runner</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background-color: #87CEEB;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="gameCanvas" width="800" height="400"></canvas>
-  <script src="game.js"></script>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const playerImage = new Image();
+        playerImage.src = 'assets/teo-sprite.png'; // make sure the image is in the correct folder
+
+        const player = {
+            x: 50,
+            y: 300,
+            width: 32,
+            height: 32,
+            frame: 0,
+            frameTimer: 0,
+            frameInterval: 10
+        };
+
+        function updatePlayer() {
+            player.frameTimer++;
+            if (player.frameTimer >= player.frameInterval) {
+                player.frame = (player.frame + 1) % 4; // assuming 4-frame sprite
+                player.frameTimer = 0;
+            }
+        }
+
+        function drawPlayer() {
+            ctx.drawImage(
+                playerImage,
+                player.frame * player.width, 0, // source x, y
+                player.width, player.height,     // source width, height
+                player.x, player.y,              // destination x, y
+                player.width, player.height      // destination width, height
+            );
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            updatePlayer();
+            drawPlayer();
+            requestAnimationFrame(gameLoop);
+        }
+
+        playerImage.onload = function () {
+            gameLoop();
+        };
+    </script>
 </body>
 </html>
