@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Love Runner</title>
     <style>
         html, body {
@@ -16,6 +17,7 @@
             top: 0;
             left: 0;
             background-color: #87CEEB;
+            touch-action: none;
         }
     </style>
 </head>
@@ -26,7 +28,6 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Imposta le dimensioni reali del canvas per il rendering
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
