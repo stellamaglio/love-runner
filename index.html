@@ -22,7 +22,7 @@
         const ctx = canvas.getContext('2d');
 
         const playerImage = new Image();
-        playerImage.src = 'assets/teo-sprite.png'; // make sure the image is in the correct folder
+        playerImage.src = 'assets/teo-sprite.png'; // Assicurati che il file sia caricato nella cartella
 
         const player = {
             x: 50,
@@ -37,7 +37,7 @@
         function updatePlayer() {
             player.frameTimer++;
             if (player.frameTimer >= player.frameInterval) {
-                player.frame = (player.frame + 1) % 4; // assuming 4-frame sprite
+                player.frame = (player.frame + 1) % 4; // Sprite sheet con 4 frame
                 player.frameTimer = 0;
             }
         }
@@ -65,3 +65,4 @@
     </script>
 </body>
 </html>
+
