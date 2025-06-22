@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Love Runner</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #87CEEB;
+            image-rendering: pixelated;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #87CEEB;
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const backgrounds = [
+        "budapest.png",
+        "lisbona.png",
+        "norvegia.png",
+        "istanbul.png"
+    ];
+    let currentBgIndex = 0;
+    let bgChangeTimer = 0;
+    const bgChangeInterval = 1000 * 40; // cambia ogni 40 secondi
+    const bgImages = backgrounds.map(src => {
+        const img = new Image();
+        img.src = "assets/" + src;
+        return img;
+    });
+
+    let player = {
+        x: 100,
+        y: 0,
+        size: 50,
+        color: "green",
+        velocityY: 0,
+        velocityX: 0,
+        speed: 5,
+        jumpPower: -15,
+        gravity: 0.8,
+        isOnGround: false,
+        isJumping: false,
+        jumpTime: 0,
+        maxJumpTime: 15
+    };
+
+    let keys = {};
+    let cameraX = 0;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    function drawBackground() {
+        const bg = bgImages[currentBgIndex];
+        if (bg.complete) {
+            ctx.drawImage(bg, -cameraX % canvas.width, 0, canvas.width, canvas.height);
+            ctx.drawImage(bg, canvas.width - cameraX % canvas.width, 0, canvas.width, canvas.height);
+        }
+    }
+
+    function drawPlayer() {
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x - cameraX, player.y, player.size, player.size);
+    }
+
+    function updatePlayer() {
+        if (keys[" "] && player.isOnGround) {
+            player.isJumping = true;
+            player.jumpTime = 0;
+            player.isOnGround = false;
+        }
+
+        if (player.isJumping) {
+            if (keys[" "] && player.jumpTime < player.maxJumpTime) {
+                player.velocityY = player.jumpPower;
+                player.jumpTime++;
+            } else {
+                player.isJumping = false;
+            }
+        }
+
+        player.velocityY += player.gravity;
+        player.y += player.velocityY;
+        player.x += player.velocityX;
+
+        if (player.y + player.size >= canvas.height) {
+            player.y = canvas.height - player.size;
+            player.velocityY = 0;
+            player.isOnGround = true;
+        } else {
+            player.isOnGround = false;
+        }
+
+        cameraX = player.x - 100;
+    }
+
+    function updateBackground() {
+        bgChangeTimer += 16.66;
+        if (bgChangeTimer > bgChangeInterval) {
+            currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
+            bgChangeTimer = 0;
+        }
+    }
+
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground();
+        updatePlayer();
+        drawPlayer();
+        updateBackground();
+        requestAnimationFrame(gameLoop);
+    }
+
+    window.addEventListener("keydown", function(event) {
+        keys[event.key] = true;
+        if (event.code === "ArrowRight" || event.code === "KeyD") {
+            player.velocityX = player.speed;
+        } else if (event.code === "ArrowLeft" || event.code === "KeyA") {
+            player.velocityX = -player.speed;
+        }
+    });
+
+    window.addEventListener("keyup", function(event) {
+        keys[event.key] = false;
+        if (["ArrowRight", "ArrowLeft", "KeyD", "KeyA"].includes(event.code)) {
+            player.velocityX = 0;
+        }
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    gameLoop();
+</script>
+</body>
+</html>
